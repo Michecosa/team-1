@@ -26,6 +26,7 @@
 - `product_quantity` INT NULL
 - `color` VARCHAR(50) NULL
 - `dimensions` VARCHAR(50) NOT NULL
+- `url_image` VARCHAR(255)
 - `category_id` INT _FOREIGN KEY_
 
 ## WISHLIST
