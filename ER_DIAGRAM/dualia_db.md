@@ -69,3 +69,15 @@
 - `quantity` INT NOT NULL
 - `price` DECIMAL(10,2) NOT NULL
 - **PRIMARY KEY** (`order_id`, `product_id`)
+
+## CART
+
+- `cart_id` INT AUTO_INCREMENT **PRIMARY KEY**
+- `user_id` INT UNIQUE _FOREIGN KEY_
+
+## CART_ITEM
+
+- `cart_id` INT _FOREIGN KEY_
+- `product_id` INT _FOREIGN KEY_
+- QUANTITY INT NOT NULL
+- **PRIMARY KEY** (`cart_id`, `product_id`)
