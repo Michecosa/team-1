@@ -35,12 +35,20 @@
 ## ORDER
 
 - `order_id` INT AUTO_INCREMENT **PRIMARY KEY**
-- `email` VARCHAR(100) NOT NULL
 - `date` DATE NOT NULL
 - `total_amount` DECIMAL(10,2) NOT NULL
 - `status` VARCHAR(50) NOT NULL
 - `promotion_id` INT _FOREIGN KEY_
 - `free_shipping` BOOLEAN DEFAULT FALSE
+- `email` VARCHAR(100) NOT NULL
+- `first_name` VARCHAR(50) NOT NULL
+- `last_name` VARCHAR(50) NOT NULL
+- `street` VARCHAR(255) NOT NULL
+- `house_number` VARCHAR(10) NOT NULL
+- `city` VARCHAR(50) NOT NULL
+- `state` VARCHAR(50) NOT NULL
+- `postal_code` VARCHAR(20) NOT NULL
+- `country` VARCHAR(50) NOT NULL
 
 ## ORDER_ITEM
 
