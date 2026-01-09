@@ -20,7 +20,7 @@
 - `url_image` VARCHAR(255)
 - `category_id` INT _FOREIGN KEY_
 
-## PROMOTION (or DISCOUNT)
+## DISCOUNT
 
 - `promotion_id` INT AUTO_INCREMENT **PRIMARY KEY**
 - `name` VARCHAR(100) NOT NULL
