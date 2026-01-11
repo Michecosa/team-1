@@ -1,0 +1,26 @@
+{
+  "name": "team-1",
+  "version": "1.0.0",
+  "description": "**Dualia – Due colori, un equilibrio**  \r E-commerce di arredamento minimal per la casa, basato su forme essenziali e palette cromatiche ridotte.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Michecosa/team-1.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Michecosa/team-1/issues"
+  },
+  "homepage": "https://github.com/Michecosa/team-1#readme",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
