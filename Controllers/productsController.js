@@ -1,42 +1,54 @@
-const connection = require('../database/connection')
+const connection = require("../database/connection");
 
-const index = (req, res)=> {
-    
-    const sql = 'SELECT * FROM products';
+const index = (req, res) => {
+  const sql = "SELECT * FROM products";
+  connection.query(sql, (err, resu) => {
+    if (err) {
+      return res.status(500).json({
+        error: "il database ha fallito",
+      });
+    }
+    res.json(resu);
+  });
+};
 
-    connection.query(sql, (err, resu) => {
-         if (err) {
-        return res.status(500).json({
-        error: 'il database ha fallito'})
-    };
+const show = (req, res) => {
+  const id = req.params.id;
+  const sql = "SELECT * FROM products WHERE product_id = ?";
+  connection.query(sql, [id], (err, resu) => {
+    if (err)
+      return res.status(500).json({
+        error: "problemi con il server",
+      });
+    if (resu.length === 0)
+      return res.status(404).json({ error: "prodotto inesistente" });
+    const prodotto = resu[0];
+    res.json(prodotto);
+  });
+};
 
-    res.json(resu)
+const search = (req, res) => {
+  const term = req.query.search || "";
 
-    })
-}
+  const sql = `
+    SELECT *
+    FROM products
+    WHERE name LIKE ? 
+       OR description LIKE ?
+  `;
 
-
-const show = (req, res)=> {
-
-    const id = req.params.id
-    
-    const sql = 'SELECT * FROM products WHERE product_id = ?';
-
-    connection.query(sql, [id], (err, resu) => {
-        if (err) return res.status(500).json({
-            error: 'problemi con il server'
-        });
-        if (resu.length === 0) return res.status(404).json({error: 'prodotto inesistente'});
-
-        const prodotto = resu[0]
-
-        res.json(prodotto)
-
-    })
-
+  connection.query(sql, [`%${term}%`, `%${term}%`], (err, results) => {
+    if (err) {
+      return res.status(500).json({
+        error: "errore nella query di ricerca",
+      });
+    }
+    res.json(results);
+  });
 };
 
 module.exports = {
-    index,
-    show
-}
+  index,
+  show,
+  search,
+};
