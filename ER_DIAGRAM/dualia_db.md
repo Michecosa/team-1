@@ -10,8 +10,8 @@
 
 ## PRODUCT
 
-- `product_id` INT AUTO_INCREMENT **PRIMARY KEY**
-- `name` VARCHAR(50) NOT NULL 
+- `product_id` VARCHAR(50) **PRIMARY KEY**
+- `name` VARCHAR(50) NOT NULL
 - `description` TEXT NOT NULL
 - `price` DECIMAL(10,2) NOT NULL
 - `full_price` DECIMAL(10,2) NOT NULL
