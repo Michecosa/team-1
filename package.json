@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/Michecosa/team-1#readme",
   "dependencies": {
+    "bootstrap-icons": "^1.13.1",
     "cors": "^2.8.5",
     "express": "^5.2.1",
     "mysql2": "^3.16.0"
