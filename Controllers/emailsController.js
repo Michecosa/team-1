@@ -36,7 +36,7 @@ exports.sendNewsletterEmail = async (req, res) => {
           seamless shopping experience.
         </p>
         <div style="text-align:center; margin:30px 0;">
-          <img src="../assets/logo_dualia.jpeg" alt="DUALIA logo" style="max-width:160px;" />
+          <img src="http://localhost:3000/logo_dualia_welcome.jpeg" alt="DUALIA logo" style="max-width:160px;" />
         </div>
         <p>
           Every product in our collection is carefully selected to meet the
