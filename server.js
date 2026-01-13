@@ -3,6 +3,7 @@ const app = express();
 const PORT = 3000;
 const productsRouter = require("./Routers/productsRouter");
 const ordersRouter = require("./Routers/ordersRouter");
+const emailsRouter = require("./Routers/emailsRouter");
 const cors = require("cors");
 
 app.use(
@@ -26,5 +27,5 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/products", productsRouter);
-
+app.use("/api/emails", emailsRouter);
 app.use("/orders", ordersRouter);
