@@ -49,23 +49,23 @@ exports.sendNewsletterEmail = async (req, res) => {
         arrivals, and experience the difference that true quality makes.
         Your next exceptional purchase is waiting for you, just a few clicks away.
       </p>
-      <div style={{textAlign: 'center', padding: '30px', backgroundColor: '#f9f9f9', borderRadius: '12px', border: '1px solid #eee', margin: '40px 0'}}>
-        <h3 style={{ margin: '0 0 10px 0', fontSize: '20px' }}>Special Welcome Gift</h3>
-        <p style={{ fontSize: '15px', margin: '0 0 20px 0' }}>
+      <div style="textAlign: 'center', padding: '30px', backgroundColor: '#f9f9f9', borderRadius: '12px', border: '1px solid #eee', margin: '40px 0'">
+        <h3 style=" margin: '0 0 10px 0', fontSize: '20px'">Special Welcome Gift</h3>
+        <p style="fontSize: '15px', margin: '0 0 20px 0'">
          To celebrate your arrival, we have reserved a 
          <strong>10% discount</strong> 
          for you to use on your first order!
         </p>
-        <div style={{display: 'inline-block', padding: '15px 30px', border: '2px dashed #333', borderRadius: '8px', marginBottom: '10px'}}>
-         <span style={{ fontSize: '22px', fontWeight: 'bold', letterSpacing: '2px' }}>WELCOME10</span>
+        <div style="display: 'inline-block', padding: '15px 30px', border: '2px dashed #333', borderRadius: '8px', marginBottom: '10px'">
+         <span style="fontSize: '22px', fontWeight: 'bold', letterSpacing: '2px'">WELCOME10</span>
         </div>
-        <div style={{ fontSize: '12px', color: '#888', marginTop: '5px' }}>
+        <div style="fontSize: '12px', color: '#888', marginTop: '5px'">
          Valid until: 31/12/2026
         </div>
-        <p style={{ fontSize: '14px', marginTop: '20px', color: '#666' }}>
+        <p style="fontSize: '14px', marginTop: '20px', color: '#666'">
          Enter the code at checkout to apply the reduction.
         </p>
-        <a href="/" style={{display: 'inline-block', marginTop: '15px', padding: '12px 40px', backgroundColor: '#000', color: '#fff', textDecoration: 'none', fontWeight: 'bold', borderRadius: '5px', fontSize: '14px'}}>
+        <a href="http://localhost:3000/" style="display: 'inline-block', marginTop: '15px', padding: '12px 40px', backgroundColor: '#000', color: '#fff', textDecoration: 'none', fontWeight: 'bold', borderRadius: '5px', fontSize: '14px'">
          SHOP NOW
         </a>
       </div>
