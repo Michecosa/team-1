@@ -65,7 +65,7 @@ exports.sendNewsletterEmail = async (req, res) => {
         <p style="fontSize: '14px', marginTop: '20px', color: '#666'">
          Enter the code at checkout to apply the reduction.
         </p>
-        <a href="http://localhost:3000/" style="display: 'inline-block', marginTop: '15px', padding: '12px 40px', backgroundColor: '#000', color: '#fff', textDecoration: 'none', fontWeight: 'bold', borderRadius: '5px', fontSize: '14px'">
+        <a href="http://localhost:5173/" style="display: 'inline-block', marginTop: '15px', padding: '12px 40px', backgroundColor: '#000', color: '#fff', textDecoration: 'none', fontWeight: 'bold', borderRadius: '5px', fontSize: '14px'">
          SHOP NOW
         </a>
       </div>
