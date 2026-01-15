@@ -4,6 +4,7 @@ const PORT = 3000;
 const productsRouter = require("./Routers/productsRouter");
 const ordersRouter = require("./Routers/ordersRouter");
 const emailsRouter = require("./Routers/emailsRouter");
+const discountRouter = require("./Routers/discountRouter");
 const notFound = require("./middlewares/notFound");
 const errorHandler = require("./middlewares/errorHandler");
 const cors = require("cors");
@@ -27,6 +28,7 @@ app.get("/errore", (req, res) => {
 app.use("/api/products", productsRouter);
 app.use("/api/emails", emailsRouter);
 app.use("/orders", ordersRouter);
+app.use("/api/discounts", discountRouter);
 
 app.use(notFound);
 app.use(errorHandler);

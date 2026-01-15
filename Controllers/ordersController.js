@@ -2,7 +2,7 @@ const connection = require("../database/connection");
 const { sendOrderEmails } = require("../services/emailService");
 
 const createOrder = (req, res) => {
-  const { items, user } = req.body;
+  const { items, user, promotion_id } = req.body;
 
   if (!items || items.length === 0) {
     return res.status(400).json({ error: "carrello vuoto" });
@@ -25,78 +25,123 @@ const createOrder = (req, res) => {
       total += prod.price * item.quantity;
     });
 
-    const sqlOrder = `
-        INSERT INTO orders 
-        (date, total_amount, status, promotion_id, free_shipping, email, first_name, last_name, street, house_number, city, state, postal_code, country)
-        VALUES (CURDATE(), ?, 'pending', NULL, FALSE, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+    const applyPromotion = (callback) => {
+      if (!promotion_id) {
+        return callback(null, { finalTotal: total, promoId: null });
+      }
 
-    const userData = [
-      total,
-      user.email,
-      user.first_name,
-      user.last_name,
-      user.street,
-      user.house_number,
-      user.city,
-      user.state,
-      user.postal_code,
-      user.country,
-    ];
-
-    connection.query(sqlOrder, userData, (err, orderRes) => {
-      if (err)
-        return res.status(500).json({ error: "errore creazione ordine" });
-
-      const orderId = orderRes.insertId;
-
-      const sqlItem = `
-        INSERT INTO order_item (order_id, product_id, quantity, price)
-        VALUES ?
+      const sqlDiscount = `
+        SELECT *
+        FROM discount
+        WHERE promotion_id = ?
+          AND active = true
+          AND CURDATE() BETWEEN start_date AND end_date
       `;
 
-      const values = items.map((item) => {
-        const prod = products.find((p) => p.product_id === item.product_id);
-        return [orderId, item.product_id, item.quantity, prod.price];
-      });
+      connection.query(sqlDiscount, [promotion_id], (err, resu) => {
+        if (err) return callback(err);
 
-      connection.query(sqlItem, [values], async (err) => {
-        if (err) return res.status(500).json({ error: "errore items" });
-
-        const orderData = {
-          order_id: orderId,
-          date: new Date().toISOString().split("T")[0],
-          total_amount: total,
-          free_shipping: false,
-          email: user.email,
-          first_name: user.first_name,
-          last_name: user.last_name,
-          street: user.street,
-          house_number: user.house_number,
-          city: user.city,
-          state: user.state,
-          postal_code: user.postal_code,
-          country: user.country,
-        };
-
-        const emailItems = items.map((item) => {
-          const prod = products.find((p) => p.product_id === item.product_id);
-          return {
-            name: prod.name,
-            quantity: item.quantity,
-            price: prod.price,
-          };
-        });
-
-        try {
-          await sendOrderEmails(orderData, emailItems);
-        } catch (e) {
-          console.error("Errore invio email: ", e);
+        if (resu.length === 0) {
+          return callback(null, { finalTotal: total, promoId: null });
         }
 
-        res.json({
-          ok: true,
-          order_id: orderId,
-          total,
+        const d = resu[0];
+        let discountAmount = 0;
+
+        if (d.discount_type === "percentage") {
+          discountAmount = (total * d.discount_value) / 100;
+        } else {
+          discountAmount = d.discount_value;
+        }
+
+        discountAmount = Math.min(discountAmount, total);
+
+        callback(null, {
+          finalTotal: total - discountAmount,
+          promoId: d.promotion_id,
+        });
+      });
+    };
+
+    applyPromotion((err, promoRes) => {
+      if (err)
+        return res.status(500).json({ error: "errore applicazione sconto" });
+
+      const sqlOrder = `
+        INSERT INTO orders 
+        (date, total_amount, status, promotion_id, free_shipping, email, first_name, last_name, street, house_number, city, state, postal_code, country)
+        VALUES (CURDATE(), ?, 'pending', ?, FALSE, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `;
+
+      const userData = [
+        promoRes.finalTotal,
+        promoRes.promoId,
+        user.email,
+        user.first_name,
+        user.last_name,
+        user.street,
+        user.house_number,
+        user.city,
+        user.state,
+        user.postal_code,
+        user.country,
+      ];
+
+      connection.query(sqlOrder, userData, (err, orderRes) => {
+        if (err)
+          return res.status(500).json({ error: "errore creazione ordine" });
+
+        const orderId = orderRes.insertId;
+
+        const sqlItem = `
+          INSERT INTO order_item (order_id, product_id, quantity, price)
+          VALUES ?
+        `;
+
+        const values = items.map((item) => {
+          const prod = products.find((p) => p.product_id === item.product_id);
+          return [orderId, item.product_id, item.quantity, prod.price];
+        });
+
+        connection.query(sqlItem, [values], async (err) => {
+          if (err) return res.status(500).json({ error: "errore items" });
+
+          const orderData = {
+            order_id: orderId,
+            date: new Date().toISOString().split("T")[0],
+            total_amount: promoRes.finalTotal,
+            free_shipping: false,
+            email: user.email,
+            first_name: user.first_name,
+            last_name: user.last_name,
+            street: user.street,
+            house_number: user.house_number,
+            city: user.city,
+            state: user.state,
+            postal_code: user.postal_code,
+            country: user.country,
+          };
+
+          const emailItems = items.map((item) => {
+            const prod = products.find((p) => p.product_id === item.product_id);
+            return {
+              name: prod.name,
+              quantity: item.quantity,
+              price: prod.price,
+            };
+          });
+
+          try {
+            await sendOrderEmails(orderData, emailItems);
+          } catch (e) {
+            console.error("Errore invio email: ", e);
+          }
+
+          res.json({
+            ok: true,
+            order_id: orderId,
+            total: promoRes.finalTotal,
+          });
         });
       });
     });
