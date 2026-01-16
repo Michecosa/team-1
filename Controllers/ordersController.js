@@ -22,6 +22,43 @@ const createOrder = (req, res) => {
     return res.status(400).json({ error: "Carrello vuoto" });
   }
 
+  if (
+    !firstName ||
+    !lastName ||
+    !email ||
+    !street ||
+    !city ||
+    !postalCode ||
+    !country
+  ) {
+    return res
+      .status(400)
+      .json({ error: "Tutti i campi obbligatori devono essere compilati" });
+  }
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    return res.status(400).json({ error: "Formato email non valido" });
+  }
+
+  const nameRegex = /^[A-Za-zÀ-ÿ\s']{2,}$/;
+  if (!nameRegex.test(firstName) || !nameRegex.test(lastName)) {
+    return res.status(400).json({
+      error: "Nome o Cognome non validi (minimo 2 caratteri, solo lettere)",
+    });
+  }
+
+  const pcRegex = /^[0-9]{5}$/;
+  if (!pcRegex.test(postalCode)) {
+    return res
+      .status(400)
+      .json({ error: "Il Codice Postale deve essere composto da 5 cifre" });
+  }
+
+  if (city.trim().length < 2 || country.trim().length < 2) {
+    return res.status(400).json({ error: "Città o Paese non validi" });
+  }
+
   const ids = items.map((i) => i.product_id);
   const sqlProducts = `SELECT product_id, name, price FROM products WHERE product_id IN (?)`;
 
