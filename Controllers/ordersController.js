@@ -5,6 +5,7 @@ const createOrder = (req, res) => {
   const {
     items,
     promotion_id,
+    shipping_cost,
     firstName,
     lastName,
     email,
@@ -16,7 +17,8 @@ const createOrder = (req, res) => {
     country,
   } = req.body;
 
-  const shippingCost = 5.0;
+  const actualShipping =
+    shipping_cost !== undefined ? parseFloat(shipping_cost) : 5.0;
 
   if (!items || items.length === 0) {
     return res.status(400).json({ error: "Carrello vuoto" });
@@ -74,7 +76,7 @@ const createOrder = (req, res) => {
     const applyPromotion = (callback) => {
       if (!promotion_id)
         return callback(null, {
-          finalTotal: subtotal + shippingCost,
+          finalTotal: subtotal + actualShipping,
           promoId: null,
         });
 
@@ -93,7 +95,7 @@ const createOrder = (req, res) => {
               : d.discount_value;
         }
         const finalTotal =
-          subtotal - Math.min(discountAmount, subtotal) + shippingCost;
+          subtotal - Math.min(discountAmount, subtotal) + actualShipping;
         callback(null, { finalTotal, promoId: foundPromoId });
       });
     };
@@ -158,7 +160,7 @@ const createOrder = (req, res) => {
             state: state,
             postal_code: postalCode,
             country: country,
-            free_shipping: false,
+            free_shipping: actualShipping === 0,
           };
 
           const emailItems = items.map((item) => {
