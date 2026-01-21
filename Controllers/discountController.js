@@ -25,7 +25,9 @@ const validateDiscount = (req, res) => {
     }
 
     if (results.length === 0) {
-      return res.status(404).json({ error: "Codice non valido o scaduto" });
+      return res
+        .status(404)
+        .json({ error: "The code is invalid or has expired" });
     }
 
     const discountRow = results[0];
